@@ -48,6 +48,18 @@ const LoginForm: React.FC = () => {
 
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
+          <div className="mb-6 p-4 bg-muted rounded-lg">
+            <h3 className="font-semibold mb-3">Demo Login Credentials:</h3>
+            <div className="space-y-2 text-sm">
+              <div>
+                <strong>Admin:</strong> admin@bookchain.co / admin123
+              </div>
+              <div>
+                <strong>Customer:</strong> customer@bookchain.co / customer123
+              </div>
+            </div>
+          </div>
+
           <div>
             <Label htmlFor="email">Email</Label>
             <Input
