@@ -9,18 +9,10 @@ import { ArrowLeft, ShoppingCart, BookOpen } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Book } from '@/types';
 
+import { mockBooks } from '@/data/mockData';
+
 // Mock data - replace with API call
-const mockBook: Book = {
-  id: '1',
-  title: 'The Great Gatsby',
-  author: 'F. Scott Fitzgerald',
-  isbn: '978-0-7432-7356-5',
-  description: 'Set in the summer of 1922, The Great Gatsby follows narrator Nick Carraway\'s friendship with the enigmatic Jay Gatsby. Gatsby lives in a luxurious mansion in West Egg and is famous for throwing extravagant parties in hopes of winning back his lost love, Daisy Buchanan. The novel explores themes of the American Dream, love, idealism, and moral decay beneath the glittering surface of the Jazz Age.',
-  priceKes: 1500,
-  stock: 10,
-  coverImageUrl: undefined,
-  createdAt: '2024-01-01T00:00:00Z',
-};
+const mockBook: Book = mockBooks[0];
 
 const BookDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

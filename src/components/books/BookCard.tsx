@@ -43,6 +43,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, onViewDetails }) => {
         </div>
         <CardTitle className="text-lg line-clamp-2">{book.title}</CardTitle>
         <p className="text-sm text-muted-foreground">by {book.author}</p>
+        <Badge variant="outline" className="w-fit mt-2">{book.category}</Badge>
       </CardHeader>
 
       <CardContent className="flex-grow">

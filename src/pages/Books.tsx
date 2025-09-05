@@ -7,42 +7,7 @@ import BookCard from '@/components/books/BookCard';
 import { Book } from '@/types';
 import { Search, Filter } from 'lucide-react';
 
-// Mock data - replace with API call
-const mockBooks: Book[] = [
-  {
-    id: '1',
-    title: 'The Great Gatsby',
-    author: 'F. Scott Fitzgerald',
-    isbn: '978-0-7432-7356-5',
-    description: 'A classic American novel set in the summer of 1922.',
-    priceKes: 1500,
-    stock: 10,
-    coverImageUrl: undefined,
-    createdAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: '2',
-    title: 'To Kill a Mockingbird',
-    author: 'Harper Lee',
-    isbn: '978-0-06-112008-4',
-    description: 'A gripping tale of racial injustice and childhood innocence.',
-    priceKes: 1800,
-    stock: 5,
-    coverImageUrl: undefined,
-    createdAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: '3',
-    title: '1984',
-    author: 'George Orwell',
-    isbn: '978-0-452-28423-4',
-    description: 'A dystopian social science fiction novel.',
-    priceKes: 1200,
-    stock: 0,
-    coverImageUrl: undefined,
-    createdAt: '2024-01-01T00:00:00Z',
-  },
-];
+import { mockBooks } from '@/data/mockData';
 
 const Books: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -52,10 +17,14 @@ const Books: React.FC = () => {
 
   const filteredBooks = mockBooks.filter(book => {
     const matchesSearch = book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         book.author.toLowerCase().includes(searchTerm.toLowerCase());
+                         book.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         book.category.toLowerCase().includes(searchTerm.toLowerCase());
     
     if (filterBy === 'in-stock') return matchesSearch && book.stock > 0;
     if (filterBy === 'out-of-stock') return matchesSearch && book.stock === 0;
+    if (filterBy !== 'all' && filterBy !== 'in-stock' && filterBy !== 'out-of-stock') {
+      return matchesSearch && book.category === filterBy;
+    }
     return matchesSearch;
   });
 
@@ -110,7 +79,15 @@ const Books: React.FC = () => {
               <SelectValue placeholder="Filter" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Books</SelectItem>
+              <SelectItem value="all">All Categories</SelectItem>
+              <SelectItem value="Fiction">Fiction</SelectItem>
+              <SelectItem value="Technology">Technology</SelectItem>
+              <SelectItem value="History">History</SelectItem>
+              <SelectItem value="Business">Business</SelectItem>
+              <SelectItem value="Philosophy">Philosophy</SelectItem>
+              <SelectItem value="Biography">Biography</SelectItem>
+              <SelectItem value="Self-Help">Self-Help</SelectItem>
+              <SelectItem value="Science">Science</SelectItem>
               <SelectItem value="in-stock">In Stock</SelectItem>
               <SelectItem value="out-of-stock">Out of Stock</SelectItem>
             </SelectContent>

@@ -7,38 +7,13 @@ import { formatKESSimple } from '@/utils/currency';
 import { Order } from '@/types';
 import { Package, User, History, ExternalLink } from 'lucide-react';
 
-// Mock data - replace with API calls
-const mockOrders: Order[] = [
-  {
-    id: '1',
-    userId: '1',
-    totalAmountKes: 3300,
-    status: 'paid',
-    createdAt: '2024-01-15T10:30:00Z',
-    items: [],
-    blockchainTx: {
-      id: '1',
-      orderId: '1',
-      userId: '1',
-      txHash: '0x1234567890abcdef1234567890abcdef12345678',
-      contractAddress: '0xabcdef1234567890abcdef1234567890abcdef12',
-      network: 'ethereum',
-      status: 'confirmed',
-      createdAt: '2024-01-15T10:31:00Z',
-    },
-  },
-  {
-    id: '2',
-    userId: '1',
-    totalAmountKes: 1500,
-    status: 'shipped',
-    createdAt: '2024-01-10T14:20:00Z',
-    items: [],
-  },
-];
+import { mockOrders } from '@/data/mockData';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
+
+  // Filter orders for current user only
+  const userOrders = mockOrders.filter(order => order.userId === user?.id);
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -109,14 +84,14 @@ const Dashboard: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {mockOrders.length === 0 ? (
+          {userOrders.length === 0 ? (
             <div className="text-center py-6">
               <Package className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground">No orders yet</p>
             </div>
           ) : (
             <div className="space-y-4">
-              {mockOrders.map(order => (
+              {userOrders.map(order => (
                 <div key={order.id} className="border rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
                     <div>

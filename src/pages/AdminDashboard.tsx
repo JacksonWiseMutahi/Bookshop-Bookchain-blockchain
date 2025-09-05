@@ -8,76 +8,8 @@ import { formatKESSimple } from '@/utils/currency';
 import { Book, Order, User } from '@/types';
 import { BarChart3, Users, Package, ShoppingCart, Plus, Edit, Trash2 } from 'lucide-react';
 
-// Mock data - replace with API calls
-const mockStats = {
-  totalBooks: 150,
-  totalUsers: 45,
-  totalOrders: 23,
-  totalRevenue: 45000,
-};
+import { mockStats, mockBooks, mockUsers, mockOrders } from '@/data/mockData';
 
-const mockBooks: Book[] = [
-  {
-    id: '1',
-    title: 'The Great Gatsby',
-    author: 'F. Scott Fitzgerald',
-    isbn: '978-0-7432-7356-5',
-    description: 'A classic American novel',
-    priceKes: 1500,
-    stock: 10,
-    createdAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: '2',
-    title: 'To Kill a Mockingbird',
-    author: 'Harper Lee',
-    isbn: '978-0-06-112008-4',
-    description: 'A gripping tale of racial injustice',
-    priceKes: 1800,
-    stock: 5,
-    createdAt: '2024-01-01T00:00:00Z',
-  },
-];
-
-const mockUsers: User[] = [
-  {
-    id: '1',
-    name: 'John Doe',
-    email: 'john@example.com',
-    role: 'user',
-    isActive: true,
-    createdAt: '2024-01-01T00:00:00Z',
-  },
-  {
-    id: '2',
-    name: 'Jane Smith',
-    email: 'jane@example.com',
-    role: 'user',
-    isActive: true,
-    createdAt: '2024-01-01T00:00:00Z',
-  },
-];
-
-const mockOrders: Order[] = [
-  {
-    id: '1',
-    userId: '1',
-    totalAmountKes: 3300,
-    status: 'paid',
-    createdAt: '2024-01-15T10:30:00Z',
-    items: [],
-    blockchainTx: {
-      id: '1',
-      orderId: '1',
-      userId: '1',
-      txHash: '0x1234567890abcdef1234567890abcdef12345678',
-      contractAddress: '0xabcdef1234567890abcdef1234567890abcdef12',
-      network: 'ethereum',
-      status: 'confirmed',
-      createdAt: '2024-01-15T10:31:00Z',
-    },
-  },
-];
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();

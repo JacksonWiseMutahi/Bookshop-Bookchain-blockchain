@@ -15,6 +15,7 @@ export interface Book {
   description: string;
   priceKes: number;
   stock: number;
+  category: string;
   coverImageUrl?: string;
   createdAt: string;
 }
