@@ -32,16 +32,18 @@ const Navbar: React.FC = () => {
 
           {user ? (
             <div className="flex items-center space-x-2">
-              <Link to="/cart" className="relative">
-                <Button variant="ghost" size="icon">
-                  <ShoppingCart className="h-5 w-5" />
-                  {totalItems > 0 && (
-                    <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
-                      {totalItems}
-                    </Badge>
-                  )}
-                </Button>
-              </Link>
+              {user.role !== 'admin' && (
+                <Link to="/cart" className="relative">
+                  <Button variant="ghost" size="icon">
+                    <ShoppingCart className="h-5 w-5" />
+                    {totalItems > 0 && (
+                      <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-xs">
+                        {totalItems}
+                      </Badge>
+                    )}
+                  </Button>
+                </Link>
+              )}
 
               <Link to={user.role === 'admin' ? '/admin' : '/dashboard'}>
                 <Button variant="ghost" size="icon">

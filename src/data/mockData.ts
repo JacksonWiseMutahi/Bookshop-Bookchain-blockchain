@@ -10,6 +10,7 @@ export const mockBooks: Book[] = [
     priceKes: 1500,
     stock: 12,
     category: 'Fiction',
+    coverImageUrl: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=400&h=600&fit=crop&crop=center',
     createdAt: '2024-01-01T00:00:00Z',
   },
   {
@@ -21,6 +22,7 @@ export const mockBooks: Book[] = [
     priceKes: 2800,
     stock: 8,
     category: 'Technology',
+    coverImageUrl: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=400&h=600&fit=crop&crop=center',
     createdAt: '2024-01-01T00:00:00Z',
   },
   {
@@ -32,6 +34,7 @@ export const mockBooks: Book[] = [
     priceKes: 2200,
     stock: 15,
     category: 'History',
+    coverImageUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop&crop=center',
     createdAt: '2024-01-01T00:00:00Z',
   },
   {
@@ -43,6 +46,7 @@ export const mockBooks: Book[] = [
     priceKes: 1800,
     stock: 20,
     category: 'Business',
+    coverImageUrl: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=600&fit=crop&crop=center',
     createdAt: '2024-01-01T00:00:00Z',
   },
   {
@@ -54,6 +58,7 @@ export const mockBooks: Book[] = [
     priceKes: 1200,
     stock: 25,
     category: 'Philosophy',
+    coverImageUrl: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400&h=600&fit=crop&crop=center',
     createdAt: '2024-01-01T00:00:00Z',
   },
   {
@@ -65,6 +70,7 @@ export const mockBooks: Book[] = [
     priceKes: 2000,
     stock: 10,
     category: 'Biography',
+    coverImageUrl: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&h=600&fit=crop&crop=center',
     createdAt: '2024-01-01T00:00:00Z',
   },
   {
@@ -76,6 +82,7 @@ export const mockBooks: Book[] = [
     priceKes: 1600,
     stock: 18,
     category: 'Self-Help',
+    coverImageUrl: 'https://images.unsplash.com/photo-1471086569966-db3eebc25a59?w=400&h=600&fit=crop&crop=center',
     createdAt: '2024-01-01T00:00:00Z',
   },
   {
@@ -87,6 +94,7 @@ export const mockBooks: Book[] = [
     priceKes: 1400,
     stock: 22,
     category: 'Fiction',
+    coverImageUrl: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400&h=600&fit=crop&crop=center',
     createdAt: '2024-01-01T00:00:00Z',
   },
   {
@@ -98,6 +106,7 @@ export const mockBooks: Book[] = [
     priceKes: 1900,
     stock: 14,
     category: 'Self-Help',
+    coverImageUrl: 'https://images.unsplash.com/photo-1502781252888-9143ba7f074e?w=400&h=600&fit=crop&crop=center',
     createdAt: '2024-01-01T00:00:00Z',
   },
   {
@@ -109,6 +118,7 @@ export const mockBooks: Book[] = [
     priceKes: 2500,
     stock: 7,
     category: 'Science',
+    coverImageUrl: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=400&h=600&fit=crop&crop=center',
     createdAt: '2024-01-01T00:00:00Z',
   },
 ];

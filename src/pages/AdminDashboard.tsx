@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 import { formatKESSimple } from '@/utils/currency';
 import { Book, Order, User } from '@/types';
-import { BarChart3, Users, Package, ShoppingCart, Plus, Edit, Trash2, Check } from 'lucide-react';
+import { BarChart3, Users, Package, ShoppingCart, Plus, Edit, Trash2, Check, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 import { mockStats, mockBooks, mockUsers, mockOrders } from '@/data/mockData';
@@ -80,6 +80,33 @@ const AdminDashboard: React.FC = () => {
     toast({
       title: "Order accepted",
       description: `Order #${orderId} has been accepted and blockchain transaction created.`,
+    });
+  };
+
+  const declineOrder = (orderId: string) => {
+    // Find the pending order
+    const orderToDecline = pendingOrders.find(order => order.id === orderId);
+    if (!orderToDecline) return;
+
+    // Update order status to cancelled
+    const declinedOrder = {
+      ...orderToDecline,
+      status: 'cancelled' as const,
+    };
+
+    // Remove from pending orders
+    const updatedPendingOrders = pendingOrders.filter(order => order.id !== orderId);
+    setPendingOrders(updatedPendingOrders);
+    localStorage.setItem('pending_orders', JSON.stringify(updatedPendingOrders));
+
+    // Add to all orders
+    const updatedAllOrders = [...allOrders, declinedOrder];
+    setAllOrders(updatedAllOrders);
+
+    toast({
+      title: "Order declined",
+      description: `Order #${orderId} has been declined.`,
+      variant: "destructive",
     });
   };
 
@@ -234,7 +261,15 @@ const AdminDashboard: React.FC = () => {
                         </div>
                       </div>
                       
-                      <div className="mt-3 flex justify-end">
+                      <div className="mt-3 flex justify-end gap-2">
+                        <Button 
+                          size="sm" 
+                          variant="destructive"
+                          onClick={() => declineOrder(order.id)}
+                        >
+                          <X className="h-4 w-4 mr-2" />
+                          Decline
+                        </Button>
                         <Button 
                           size="sm" 
                           onClick={() => acceptOrder(order.id)}

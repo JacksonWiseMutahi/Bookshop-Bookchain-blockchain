@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { formatKESSimple } from '@/utils/currency';
-import { Trash2, Plus, Minus, ShoppingBag } from 'lucide-react';
+import { Trash2, Plus, Minus, ShoppingBag, CreditCard } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const Cart: React.FC = () => {
@@ -14,6 +15,7 @@ const Cart: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [paymentMethod, setPaymentMethod] = useState<string>('bank');
 
   const handleCheckout = () => {
     if (!user) {
@@ -165,13 +167,38 @@ const Cart: React.FC = () => {
                 </span>
               </div>
 
-              <Button 
-                className="w-full" 
-                size="lg"
-                onClick={handleCheckout}
-              >
-                Proceed to Checkout
-              </Button>
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Payment Method</label>
+                  <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select payment method" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="bank">
+                        <div className="flex items-center gap-2">
+                          <CreditCard className="h-4 w-4" />
+                          Bank Transfer
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="paypal">
+                        <div className="flex items-center gap-2">
+                          <CreditCard className="h-4 w-4" />
+                          PayPal
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Button 
+                  className="w-full" 
+                  size="lg"
+                  onClick={handleCheckout}
+                >
+                  Proceed to Checkout
+                </Button>
+              </div>
 
               <p className="text-xs text-muted-foreground text-center">
                 Secure checkout with blockchain transaction recording
