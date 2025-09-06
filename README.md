@@ -382,7 +382,7 @@ Aug 9
 
 
 
-##part2: System Analysis and Design (SAD)
+## Part 2: System Analysis and Design (SAD)
 
 System Analysis and Design Documentation
 1. Introduction
