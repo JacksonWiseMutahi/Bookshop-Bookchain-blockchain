@@ -26,10 +26,30 @@ const Cart: React.FC = () => {
       return;
     }
 
-    // Mock checkout process
+    // Create new order in pending status
+    const newOrder = {
+      id: `ord_${Date.now()}`,
+      userId: user.id,
+      totalAmountKes: getTotalPrice(),
+      status: 'pending' as const,
+      createdAt: new Date().toISOString(),
+      items: items.map(item => ({
+        id: `item_${Date.now()}_${item.book.id}`,
+        orderId: `ord_${Date.now()}`,
+        book: item.book,
+        quantity: item.quantity,
+        priceKes: item.book.priceKes
+      }))
+    };
+
+    // Add to orders (in real app, this would be saved to database)
+    const existingOrders = JSON.parse(localStorage.getItem('pending_orders') || '[]');
+    existingOrders.push(newOrder);
+    localStorage.setItem('pending_orders', JSON.stringify(existingOrders));
+
     toast({
       title: "Order placed successfully",
-      description: "Your order has been placed and will be processed shortly.",
+      description: "Your order has been submitted and is awaiting admin approval.",
     });
     clearCart();
     navigate('/dashboard');

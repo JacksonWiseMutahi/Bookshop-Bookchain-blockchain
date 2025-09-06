@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -6,14 +6,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 import { formatKESSimple } from '@/utils/currency';
 import { Book, Order, User } from '@/types';
-import { BarChart3, Users, Package, ShoppingCart, Plus, Edit, Trash2 } from 'lucide-react';
+import { BarChart3, Users, Package, ShoppingCart, Plus, Edit, Trash2, Check } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 import { mockStats, mockBooks, mockUsers, mockOrders } from '@/data/mockData';
 
 
 const AdminDashboard: React.FC = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
+  const [pendingOrders, setPendingOrders] = useState<Order[]>([]);
+  const [allOrders, setAllOrders] = useState<Order[]>(mockOrders);
+
+  useEffect(() => {
+    // Load pending orders from localStorage
+    const pending = JSON.parse(localStorage.getItem('pending_orders') || '[]');
+    setPendingOrders(pending);
+  }, []);
 
   if (user?.role !== 'admin') {
     return (
@@ -23,6 +33,55 @@ const AdminDashboard: React.FC = () => {
       </div>
     );
   }
+
+  const generateBlockchainHash = () => {
+    // Generate a mock blockchain transaction hash
+    const chars = '0123456789abcdef';
+    let hash = '0x';
+    for (let i = 0; i < 64; i++) {
+      hash += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return hash;
+  };
+
+  const acceptOrder = (orderId: string) => {
+    // Find the pending order
+    const orderToAccept = pendingOrders.find(order => order.id === orderId);
+    if (!orderToAccept) return;
+
+    // Generate blockchain transaction
+    const blockchainTx = {
+      id: `tx_${Date.now()}`,
+      orderId: orderId,
+      userId: orderToAccept.userId,
+      txHash: generateBlockchainHash(),
+      contractAddress: '0x742d35Cc6643C0532925a3b8F39d4aC447b',
+      network: 'Ethereum',
+      status: 'confirmed' as const,
+      createdAt: new Date().toISOString()
+    };
+
+    // Update order with blockchain transaction and change status to paid
+    const acceptedOrder = {
+      ...orderToAccept,
+      status: 'paid' as const,
+      blockchainTx
+    };
+
+    // Remove from pending orders
+    const updatedPendingOrders = pendingOrders.filter(order => order.id !== orderId);
+    setPendingOrders(updatedPendingOrders);
+    localStorage.setItem('pending_orders', JSON.stringify(updatedPendingOrders));
+
+    // Add to all orders
+    const updatedAllOrders = [...allOrders, acceptedOrder];
+    setAllOrders(updatedAllOrders);
+
+    toast({
+      title: "Order accepted",
+      description: `Order #${orderId} has been accepted and blockchain transaction created.`,
+    });
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -147,10 +206,60 @@ const AdminDashboard: React.FC = () => {
         <TabsContent value="orders" className="space-y-4">
           <h2 className="text-2xl font-bold">Order Management</h2>
 
+          {/* Pending Orders Section */}
+          {pendingOrders.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg text-orange-600">Pending Orders Requiring Approval</CardTitle>
+                <CardDescription>These orders are waiting for your approval to process blockchain transactions.</CardDescription>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="divide-y">
+                  {pendingOrders.map(order => (
+                    <div key={order.id} className="p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <div>
+                          <p className="font-semibold">Order #{order.id}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {new Date(order.createdAt).toLocaleDateString('en-KE')}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="font-semibold text-primary">
+                            {formatKESSimple(order.totalAmountKes)}
+                          </p>
+                          <Badge variant="outline" className="text-orange-600">
+                            Pending Approval
+                          </Badge>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-3 flex justify-end">
+                        <Button 
+                          size="sm" 
+                          onClick={() => acceptOrder(order.id)}
+                          className="bg-green-600 hover:bg-green-700"
+                        >
+                          <Check className="h-4 w-4 mr-2" />
+                          Accept Order
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* All Orders Section */}
           <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">All Orders</CardTitle>
+              <CardDescription>Complete order history with blockchain transaction details.</CardDescription>
+            </CardHeader>
             <CardContent className="p-0">
               <div className="divide-y">
-                {mockOrders.map(order => (
+                {allOrders.map(order => (
                   <div key={order.id} className="p-4">
                     <div className="flex items-center justify-between mb-2">
                       <div>
@@ -172,8 +281,14 @@ const AdminDashboard: React.FC = () => {
                     {order.blockchainTx && (
                       <div className="mt-3 p-3 bg-muted rounded-md">
                         <p className="text-sm font-medium">Blockchain Transaction</p>
-                        <p className="text-xs text-muted-foreground font-mono">
-                          {order.blockchainTx.txHash}
+                        <p className="text-xs text-muted-foreground font-mono break-all">
+                          Hash: {order.blockchainTx.txHash}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Network: {order.blockchainTx.network}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Contract: {order.blockchainTx.contractAddress}
                         </p>
                         <Badge variant="outline" className="text-xs mt-1">
                           {order.blockchainTx.status}
